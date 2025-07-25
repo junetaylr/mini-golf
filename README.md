@@ -5,7 +5,7 @@ A fun, modern, mobile-friendly mini golf game built with HTML, CSS, and JavaScri
 This project features:
 - Interactive drag-and-shoot golf ball physics
 - Mobile and desktop compatibility
-- Bubble glass UI inspired by Framer/Webflow
+- Bubble glass UI inspired
 - Custom assets for a playful, arcade vibe
 
 ## 🎮 How to Play
@@ -17,5 +17,6 @@ This project features:
 ## 📱 Mobile Ready
 Fully responsive and optimized for touch input. Works seamlessly on iPhone, iPad, and Android devices.
 
-
+# Details
+Design in Adobe Illustrator & Visual Studio Code. 
 
