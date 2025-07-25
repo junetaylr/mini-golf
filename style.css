@@ -1,0 +1,56 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: Helvetica, sans-serif;
+}
+
+/* Background Image Wrapper */
+.background {
+  width: 100%;
+  height: 100vh;
+  background-image: url("assets/minigolf.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Play Now Button */
+.play-button {
+  position: absolute;
+  bottom: 40px; /* Distance from bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.play-button:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
+
+/* 🔁 Mobile Styles */
+@media (max-width: 768px) {
+  .background {
+    background-image: url("assets/mobile.png");
+  }
+
+@media (max-width: 768px) {
+  .play-button {
+    width: 140px;
+    bottom: 30px;
+  }
+
+
+  }
+}

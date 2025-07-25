@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  font-family: Helvetica, sans-serif;
+  background-color: #d2f0e4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.maze {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  background-color: #e1f5e9;
+  border: 2px solid #333;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Maze example (drawn with borders) */
+.maze::before {
+  content: "";
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: 400px;
+  height: 200px;
+  border: 10px solid #a3d5b2;
+  box-sizing: border-box;
+}
+
+/* Golf ball */
+.ball {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: 2px solid #888;
+  border-radius: 50%;
+  left: 40px;
+  top: 340px;
+  z-index: 2;
+}
+
+/* Hole */
+.hole {
+  position: absolute;
+  width: 20px;
+  height: 8px;
+  background-color: black;
+  border-radius: 50%;
+  top: 20px;
+  right: 40px;
+  z-index: 2;
+}
+
+/* Power meter text */
+.power-indicator {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 14px;
+  color: #333;
+  background: rgba(255,255,255,0.8);
+  padding: 5px 10px;
+  border-radius: 6px;
+  z-index: 3;
+}
+
+/* Canvas for aim/pull line */
+#aimCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}

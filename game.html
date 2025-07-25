@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Mini Golf Arcade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #dff6fd, #fceff9);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      color: #333;
+    }
+
+    header {
+      font-size: 2rem;
+      font-weight: 600;
+      padding: 1.5rem;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    }
+
+    .glass-card {
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      padding: 1rem 2rem;
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-around;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .glass-card span {
+      font-size: 1.1rem;
+    }
+
+    .canvas-area {
+      background: #b9eac7;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 1000px;
+      height: 50vh;
+      position: relative;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .golf-ball, .hole {
+      position: absolute;
+      border-radius: 50%;
+      touch-action: none;
+    }
+
+    .golf-ball {
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle, #fff 40%, #ccc);
+      left: 50px;
+      top: 150px;
+      z-index: 2;
+    }
+
+    .hole {
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle, #000, #333);
+      right: 60px;
+      top: 150px;
+      z-index: 1;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .controls button {
+      background: rgba(255,255,255,0.6);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .controls button:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.8);
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.7);
+      border-radius: 12px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      font-size: 0.9rem;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .back-btn:hover {
+      background: rgba(255,255,255,0.9);
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-btn">← Back to Menu</a>
+  <header>Mini Golf Arcade ⛳️</header>
+  <div class="glass-card">
+    <span>Level 1</span>
+    <span>Par: 3</span>
+    <span id="stroke-count">Strokes: 0</span>
+  </div>
+  <div class="canvas-area" id="gameCanvas">
+    <div class="golf-ball" id="ball"></div>
+    <div class="hole" id="hole"></div>
+  </div>
+  <div class="controls">
+    <button onclick="resetGame()">Reset</button>
+  </div>
+  <script>
+    const ball = document.getElementById('ball');
+    const hole = document.getElementById('hole');
+    const gameCanvas = document.getElementById('gameCanvas');
+    const strokeDisplay = document.getElementById('stroke-count');
+    let stroke = 0;
+    let isDragging = false;
+    let startX, startY;
+    let velocityX = 0, velocityY = 0;
+    let currentX = 50, currentY = 150;
+
+    function updateBallPosition() {
+      currentX = Math.max(0, Math.min(currentX, gameCanvas.clientWidth - 30));
+      currentY = Math.max(0, Math.min(currentY, gameCanvas.clientHeight - 30));
+      ball.style.left = `${currentX}px`;
+      ball.style.top = `${currentY}px`;
+    }
+
+    ball.addEventListener('mousedown', startDrag);
+    ball.addEventListener('touchstart', startDrag);
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+
+    function startDrag(e) {
+      isDragging = true;
+      const evt = e.touches ? e.touches[0] : e;
+      startX = evt.clientX;
+      startY = evt.clientY;
+    }
+
+    function endDrag(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      const evt = e.changedTouches ? e.changedTouches[0] : e;
+      const dx = startX - evt.clientX;
+      const dy = startY - evt.clientY;
+      velocityX = dx * 0.5;
+      velocityY = dy * 0.5;
+      animateBall();
+      stroke++;
+      strokeDisplay.innerText = `Strokes: ${stroke}`;
+    }
+
+    function animateBall() {
+      const interval = setInterval(() => {
+        currentX -= velocityX;
+        currentY -= velocityY;
+
+        velocityX *= 0.95;
+        velocityY *= 0.95;
+
+        updateBallPosition();
+
+        const ballRect = ball.getBoundingClientRect();
+        const holeRect = hole.getBoundingClientRect();
+        const distance = Math.hypot(ballRect.left - holeRect.left, ballRect.top - holeRect.top);
+
+        if (distance < 20) {
+          clearInterval(interval);
+          ball.style.transition = "all 0.4s ease";
+          ball.style.transform = "scale(0)";
+          setTimeout(() => {
+            alert("Nice Shot! Ball in the hole!");
+          }, 400);
+        }
+
+        if (Math.abs(velocityX) < 0.5 && Math.abs(velocityY) < 0.5) {
+          clearInterval(interval);
+        }
+      }, 16);
+    }
+
+    function resetGame() {
+      stroke = 0;
+      strokeDisplay.innerText = 'Strokes: 0';
+      currentX = 50;
+      currentY = 150;
+      velocityX = 0;
+      velocityY = 0;
+      ball.style.transform = "scale(1)";
+      updateBallPosition();
+    }
+
+    updateBallPosition();
+  </script>
+</body>
+</html>
+
