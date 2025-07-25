@@ -17,5 +17,5 @@ This project features:
 ## 📱 Mobile Ready
 Fully responsive and optimized for touch input. Works seamlessly on iPhone, iPad, and Android devices.
 
-## 🗂 Project Structure
+
 
